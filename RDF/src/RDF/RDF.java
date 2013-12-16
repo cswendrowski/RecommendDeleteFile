@@ -22,8 +22,8 @@ public class RDF {
 		currentTime = System.currentTimeMillis();
 		time = 2629740000l; // 1 Month
 		
-		double userSize = Double.valueOf(JOptionPane.showInputDialog("What size should files be over? (GB)"));
-		int userTime = Integer.valueOf(JOptionPane.showInputDialog("How many days since last access should files be over?"));
+		double userSize = Double.valueOf(JOptionPane.showInputDialog("What size should files be over? (GB)", 1));
+		int userTime = Integer.valueOf(JOptionPane.showInputDialog("How many days since last access should files be over?", 30));
 		
 		System.out.println("Size: " + userSize + " Time: " + userTime);
 		
@@ -45,6 +45,12 @@ public class RDF {
 	private ArrayList<FileContainer> filesFound = new ArrayList<FileContainer>();
 
 	private void search(String path) {
+		if (shouldExit)
+			return;
+		
+		while (!shouldRun) {
+			//do nothing
+		}
 		File root = new File(path);
 		// System.out.println("Searching " + path);
 		Window.addText("Searching " + path);
@@ -70,5 +76,21 @@ public class RDF {
 				}
 			}
 		}
+	}
+
+	public void resume() {
+		shouldRun = true;
+		
+	}
+
+	private boolean shouldRun = true;
+	public void pause() {
+		shouldRun = false;
+		
+	}
+	
+	private boolean shouldExit = false;
+	public void stop() {
+		shouldExit = true;
 	}
 }
