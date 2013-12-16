@@ -53,13 +53,23 @@ public class Window implements ActionListener {
 		window.setVisible(true);
 
 		JFrame results = new JFrame();
+		JButton showSearch = new JButton("Show Search Window");
+		showSearch.addActionListener(this);
+		showSearch.setActionCommand("Show");
+		
+		window.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 		results.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		
 		found = new JTextArea(5, 20);
+		
 		DefaultCaret caret2 = (DefaultCaret) found.getCaret();
 		caret2.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+		
 		JScrollPane scrollPane2 = new JScrollPane(found);
 		found.setEditable(false);
+		
 		results.add(scrollPane2);
+		results.add(BorderLayout.SOUTH, showSearch);
 		results.setSize(900, 400);
 		results.setVisible(true);
 
@@ -67,7 +77,7 @@ public class Window implements ActionListener {
 	}
 
 	public static void main(String[] args) {
-		Window w = new Window();
+		new Window();
 
 	}
 
@@ -101,6 +111,9 @@ public class Window implements ActionListener {
 				return;
 			entry.stop();
 			window.setVisible(false);
+		}
+		else if (e.getActionCommand().equals("Show")) {
+			window.setVisible(true);
 		}
 	}
 }
