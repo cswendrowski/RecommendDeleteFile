@@ -1,6 +1,7 @@
 package RDF;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -69,6 +70,8 @@ public class Window implements ActionListener {
 		DefaultTableModel defTableModel = new DefaultTableModel(data, names);
 		found = new JTable(defTableModel);
 		// found.setModel(new DefaultTableModel());
+		found.setShowGrid(false);
+		found.setIntercellSpacing(new Dimension(0, 0));
 
 		JScrollPane scrollPane2 = new JScrollPane(found);
 
