@@ -38,7 +38,7 @@ public class RDF {
 	}
 
 	public void start() {
-		Window.addResult(String.format("Files over %.2f GB and older than %d days in C:/",size / 1073741824.0,time / 86400000));
+		Window.setTitle(String.format("Files over %.2f GB and older than %d days in C:/",size / 1073741824.0,time / 86400000));
 		search("C:/");
 		Window.clearText();
 	}

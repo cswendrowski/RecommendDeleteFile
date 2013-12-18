@@ -14,6 +14,7 @@ import java.util.Scanner;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -30,7 +31,7 @@ public class Window implements ActionListener {
 	static JButton resume, pause;
 	static RDF entry;
 	static String[] names = { "Name", "Size", "Last Accessed", "Location" };
-	static JFrame window;
+	static JFrame window, results;
 	static Object[][] data = new Object[1][4];
 
 	public Window() {
@@ -64,7 +65,7 @@ public class Window implements ActionListener {
 		window.setSize(800, 600);
 		window.setVisible(true);
 
-		JFrame results = new JFrame();
+		results = new JFrame();
 		JButton showSearch = new JButton("Show Search Window");
 		showSearch.addActionListener(this);
 		showSearch.setActionCommand("Show");
@@ -149,6 +150,10 @@ public class Window implements ActionListener {
 	public static void clearText() {
 		text.setText("Search complete!");
 
+	}
+	
+	public static void setTitle(String s) {
+		results.add(BorderLayout.NORTH, new JLabel(s));
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
