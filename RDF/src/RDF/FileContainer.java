@@ -40,6 +40,7 @@ public class FileContainer {
 	}
 
 	public String location() {
-		return file.getPath();
+		return file.getParent(); //Desktop
+		//return file.getAbsolutePath();
 	}
 }

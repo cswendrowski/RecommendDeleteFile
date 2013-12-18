@@ -68,11 +68,11 @@ public class RDF {
 					FileContainer fc = new FileContainer(f);
 					if (currentTime - fc.lastAccess() >= time) {
 						filesFound.add(fc);
-						Window.addResult(String.format("%-25s", fc.name()) + "\tSize: "
+						Window.addResult(String.format("%-25s", fc.name()) + "\t "
 								+ String.format("%.2f GB", fc.size() / 1073741824.0)
-								+ "\tLast Accessed:"
+								+ "\t"
 								+ String.format(" %d days ago",((currentTime - fc.lastAccess()) / 86400000))
-								+ "\tLocation: " + fc.location());
+								+ "\t" + fc.location());
 					}
 				}
 			}
