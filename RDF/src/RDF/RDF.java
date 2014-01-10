@@ -17,8 +17,11 @@ import javax.swing.JOptionPane;
 public class RDF {
 
 	private long size, time, currentTime;
+	Window window;
 
-	public RDF() {
+	public RDF(Window w) {
+		window = w;
+		
 		size = /* 1048576; */1073741824; // 1 GB
 		currentTime = System.currentTimeMillis();
 		time = 2629740000l; // 1 Month
@@ -38,9 +41,9 @@ public class RDF {
 	}
 
 	public void start() {
-		Window.setTitle(String.format("Files over %.2f GB and older than %d days in C:/",size / 1073741824.0,time / 86400000));
+		window.results.setTitle(String.format("Files over %.2f GB and older than %d days in C:/",size / 1073741824.0,time / 86400000));
 		search("C:/");
-		Window.clearText();
+		window.search.clearText();
 	}
 
 	private ArrayList<FileContainer> filesFound = new ArrayList<FileContainer>();
@@ -54,7 +57,7 @@ public class RDF {
 		}
 		File root = new File(path);
 		// System.out.println("Searching " + path);
-		Window.addText("Searching " + path);
+		window.search.addText("Searching " + path);
 		File[] list = root.listFiles();
 
 		if (list == null)
@@ -68,7 +71,7 @@ public class RDF {
 					FileContainer fc = new FileContainer(f);
 					if (currentTime - fc.lastAccess() >= time) {
 						filesFound.add(fc);
-						Window.addResult(String.format("%-25s", fc.name()) + "\t "
+						window.results.addResult(String.format("%-25s", fc.name()) + "\t "
 								+ String.format("%.2f GB", fc.size() / 1073741824.0)
 								+ "\t"
 								+ String.format(" %d days ago",((currentTime - fc.lastAccess()) / 86400000))
