@@ -8,6 +8,8 @@ import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
 
+import javax.activation.MimetypesFileTypeMap;
+
 public class FileContainer {
 
 	File file;

@@ -51,7 +51,7 @@ public class SearchWindow implements ActionListener {
 		window.add(BorderLayout.CENTER, scrollPane);
 		window.add(BorderLayout.SOUTH, buttons);
 		window.setSize(800, 600);
-		window.setVisible(true);
+		window.setVisible(false);
 	}
 	
 	public void clearText() {
@@ -82,6 +82,11 @@ public class SearchWindow implements ActionListener {
 			entry.stop();
 			window.setVisible(false);
 		}
+		
+	}
+
+	public void show() {
+		window.setVisible(true);
 		
 	}
 }

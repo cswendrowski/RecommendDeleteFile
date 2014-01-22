@@ -57,7 +57,7 @@ public class ResultsWindow implements ActionListener {
 		results.add(scrollPane2);
 		results.add(BorderLayout.SOUTH, resultButtons);
 		results.setSize(900, 400);
-		results.setVisible(true);
+		results.setVisible(false);
 
 		results.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 	}
@@ -137,5 +137,10 @@ public class ResultsWindow implements ActionListener {
 
 	public void setTitle(String s) {
 		results.setTitle(s);
+	}
+
+	public void show() {
+		results.setVisible(true);
+		
 	}
 }
