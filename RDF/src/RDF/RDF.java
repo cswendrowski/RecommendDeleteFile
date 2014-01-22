@@ -16,7 +16,7 @@ import javax.swing.JOptionPane;
  */
 public class RDF {
 
-	private long size, time, currentTime;
+	private long size, time, currentTime, foundSpace, totalSpace;
 	Window window;
 
 	public RDF(Window w) {
@@ -25,6 +25,8 @@ public class RDF {
 		size = /* 1048576; */1073741824; // 1 GB
 		currentTime = System.currentTimeMillis();
 		time = 2629740000l; // 1 Month
+		totalSpace = new File("C:/").getTotalSpace() - new File("C:/").getFreeSpace();
+		foundSpace = 0;
 
 		// System.out.println("Size final: " + size);
 	}
@@ -53,6 +55,7 @@ public class RDF {
 		    @Override
 		    public void run() {
 		        search("C:/");
+		        window.search.clearText();
 		    }
 		});
 		repainter.setName("Searcher");
@@ -60,7 +63,7 @@ public class RDF {
 		repainter.start();
 		
 		//search("C:/");
-		window.search.clearText();
+		
 	}
 
 	private ArrayList<FileContainer> filesFound = new ArrayList<FileContainer>();
@@ -84,8 +87,8 @@ public class RDF {
 			if (f.isDirectory()) {
 				search(f.getAbsolutePath());
 			} else {
+				FileContainer fc = new FileContainer(f);
 				if (f.length() >= size) {
-					FileContainer fc = new FileContainer(f);
 					if (currentTime - fc.lastAccess() >= time) {
 						filesFound.add(fc);
 						window.results
@@ -98,8 +101,12 @@ public class RDF {
 												" %d days ago",
 												((currentTime - fc.lastAccess()) / 86400000))
 										+ "\t" + fc.location());
+						
 					}
 				}
+				foundSpace += fc.size();
+				double percent = ((double)foundSpace/(double)totalSpace) * 100;
+				window.search.window.setTitle(String.format("%.1f", percent) + "%");
 			}
 		}
 	}
