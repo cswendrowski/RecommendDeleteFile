@@ -16,16 +16,17 @@ import javax.swing.JOptionPane;
  */
 public class RDF {
 
-	private long size, time, currentTime, foundSpace, totalSpace;
+	private long size, time, startTime, foundSpace, totalSpace;
 	Window window;
 
 	public RDF(Window w) {
 		window = w;
 
 		size = /* 1048576; */1073741824; // 1 GB
-		currentTime = System.currentTimeMillis();
+		startTime = System.currentTimeMillis();
 		time = 2629740000l; // 1 Month
-		totalSpace = new File("C:/").getTotalSpace() - new File("C:/").getFreeSpace();
+		totalSpace = new File("C:/").getTotalSpace()
+				- new File("C:/").getFreeSpace();
 		foundSpace = 0;
 
 		// System.out.println("Size final: " + size);
@@ -50,20 +51,20 @@ public class RDF {
 		window.results.setTitle(String.format(
 				"Files over %.2f GB and older than %d days in C:/",
 				size / 1073741824.0, time / 86400000));
-		
+
 		Thread repainter = new Thread(new Runnable() {
-		    @Override
-		    public void run() {
-		        search("C:/");
-		        window.search.clearText();
-		    }
+			@Override
+			public void run() {
+				search("C:/");
+				window.search.clearText();
+			}
 		});
 		repainter.setName("Searcher");
 		repainter.setPriority(Thread.MIN_PRIORITY);
 		repainter.start();
-		
-		//search("C:/");
-		
+
+		// search("C:/");
+
 	}
 
 	private ArrayList<FileContainer> filesFound = new ArrayList<FileContainer>();
@@ -89,7 +90,7 @@ public class RDF {
 			} else {
 				FileContainer fc = new FileContainer(f);
 				if (f.length() >= size) {
-					if (currentTime - fc.lastAccess() >= time) {
+					if (startTime - fc.lastAccess() >= time) {
 						filesFound.add(fc);
 						window.results
 								.addResult(String.format("%-25s", fc.name())
@@ -99,14 +100,20 @@ public class RDF {
 										+ "\t"
 										+ String.format(
 												" %d days ago",
-												((currentTime - fc.lastAccess()) / 86400000))
+												((startTime - fc.lastAccess()) / 86400000))
 										+ "\t" + fc.location());
-						
+
 					}
 				}
 				foundSpace += fc.size();
-				double percent = ((double)foundSpace/(double)totalSpace) * 100;
-				window.search.window.setTitle(String.format("%.1f", percent) + "%");
+				double percent = ((double) foundSpace / (double) totalSpace) * 100;
+				int passedTime = (int) (System.currentTimeMillis() - startTime) / 1000; // Seconds
+				double dataRate = ((double) foundSpace / 1048576) / passedTime; // MB/s
+				int eta = (int) (dataRate * (((double) totalSpace - (double) foundSpace) / 1048576));
+				System.out.println("Passed: " + passedTime + " Found data:" +
+						(foundSpace/1048576) +  " dataRate: " + dataRate);
+				window.search.window.setTitle(String.format("%.1f", percent)
+						+ "%    ETA: " + (eta/60) + " minutes " + (eta%60) + " seconds");
 			}
 		}
 	}
