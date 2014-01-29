@@ -62,9 +62,7 @@ public class RDF {
 		repainter.setName("Searcher");
 		repainter.setPriority(Thread.MIN_PRIORITY);
 		repainter.start();
-
-		// search("C:/");
-
+		startTime = System.currentTimeMillis();
 	}
 
 	private ArrayList<FileContainer> filesFound = new ArrayList<FileContainer>();
@@ -109,9 +107,7 @@ public class RDF {
 				double percent = ((double) foundSpace / (double) totalSpace) * 100;
 				int passedTime = (int) (System.currentTimeMillis() - startTime) / 1000; // Seconds
 				double dataRate = ((double) foundSpace / 1048576) / passedTime; // MB/s
-				int eta = (int) (dataRate * (((double) totalSpace - (double) foundSpace) / 1048576));
-				System.out.println("Passed: " + passedTime + " Found data:" +
-						(foundSpace/1048576) +  " dataRate: " + dataRate);
+				int eta = (int) ((1/dataRate) * (((double) totalSpace - (double) foundSpace) / 1048576));
 				window.search.window.setTitle(String.format("%.1f", percent)
 						+ "%    ETA: " + (eta/60) + " minutes " + (eta%60) + " seconds");
 			}
