@@ -25,8 +25,10 @@ public class RDF {
 		size = /* 1048576; */1073741824; // 1 GB
 		startTime = System.currentTimeMillis();
 		time = 2629740000l; // 1 Month
-		totalSpace = new File("C:/").getTotalSpace()
-				- new File("C:/").getFreeSpace();
+		File c = new File("C:/");
+		totalSpace = (long) ((c.getTotalSpace()
+				- c.getUsableSpace()) * 1.07);
+		
 		foundSpace = 0;
 
 		// System.out.println("Size final: " + size);
@@ -57,6 +59,7 @@ public class RDF {
 			public void run() {
 				search("C:/");
 				window.search.clearText();
+				window.search.window.setTitle("100%    ETA: DONE");
 			}
 		});
 		repainter.setName("Searcher");
@@ -110,6 +113,11 @@ public class RDF {
 				int eta = (int) ((1/dataRate) * (((double) totalSpace - (double) foundSpace) / 1048576));
 				window.search.window.setTitle(String.format("%.1f", percent)
 						+ "%    ETA: " + (eta/60) + " minutes " + (eta%60) + " seconds");
+				
+				if (percent > 100)
+					window.search.window.setTitle("100%    ETA: DONE");
+				
+				System.out.println("Found: " + foundSpace + "  Total: " + totalSpace);
 			}
 		}
 	}
