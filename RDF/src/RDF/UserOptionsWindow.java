@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -44,15 +46,18 @@ public class UserOptionsWindow implements ActionListener {
 		
 		frame.add(masterPanel);
 		
-		JPanel buttons = new JPanel(new GridLayout(0,2));
+		JPanel buttons = new JPanel(new GridLayout(0,3));
 		JButton ok = new JButton("Ok");
 		ok.setActionCommand("Ok");
 		JButton cancel = new JButton("Cancel");
+		JButton blacklist = new JButton("Blacklist");
 		buttons.add(ok);
 		buttons.add(cancel);
+		buttons.add(blacklist);
 		
 		ok.addActionListener(this);
 		cancel.addActionListener(this);
+		blacklist.addActionListener(this);
 		
 		frame.add(buttons, BorderLayout.SOUTH);
 		frame.setSize(800, 500);
@@ -78,6 +83,15 @@ public class UserOptionsWindow implements ActionListener {
 		}
 		else if (e.getActionCommand().equals("Cancel"))
 			System.exit(0);
+		else if (e.getActionCommand().equals("Blacklist")) {
+			File f = new File("blacklist.txt");
+			try {
+				Runtime.getRuntime().exec("notepad " + f.getAbsolutePath());
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
 		
 	}
 

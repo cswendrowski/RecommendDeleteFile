@@ -1,10 +1,10 @@
 package RDF;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-
-import javax.swing.JOptionPane;
+import java.util.Scanner;
 
 /**
  * 
@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 public class RDF {
 
 	private long size, time, startTime, foundSpace, totalSpace;
+	private ArrayList<String> blackFiles, blackTypes;
 	Window window;
 
 	public RDF(Window w) {
@@ -26,15 +27,23 @@ public class RDF {
 		startTime = System.currentTimeMillis();
 		time = 2629740000l; // 1 Month
 		File c = new File("C:/");
-		totalSpace = (long) ((c.getTotalSpace()
-				- c.getUsableSpace()) * 1.07);
-		
+		/*
+		 * System.out.println("C:/ total: " + c.getTotalSpace() + " free: " +
+		 * c.getFreeSpace() + " used:" + (c.getTotalSpace() -
+		 * c.getFreeSpace()));
+		 */
+		totalSpace = c.getTotalSpace() - c.getUsableSpace();
+
 		foundSpace = 0;
+
+		blackFiles = new ArrayList<String>();
+		blackTypes = new ArrayList<String>();
 
 		// System.out.println("Size final: " + size);
 	}
 
 	public void start() {
+		loadBlacklist();
 		double userSize = window.fileSize();
 		// Double.valueOf(JOptionPane.showInputDialog("What size should files be over? (GB)",
 		// 1));
@@ -59,6 +68,11 @@ public class RDF {
 			public void run() {
 				search("C:/");
 				window.search.clearText();
+				window.search.addText("Found " + (foundSpace / 1048576)
+						+ " MB of data. System reported "
+						+ ((int) ((totalSpace / 1.07) / 1048576))
+						+ " MB. Adjusted total is " + (totalSpace / 1048576)
+						+ " MB");
 				window.search.window.setTitle("100%    ETA: DONE");
 			}
 		});
@@ -66,6 +80,54 @@ public class RDF {
 		repainter.setPriority(Thread.MIN_PRIORITY);
 		repainter.start();
 		startTime = System.currentTimeMillis();
+	}
+
+	private void loadBlacklist() {
+		File list = new File("blacklist.txt");
+		if (!list.exists())
+			try {
+				list.createNewFile();
+				System.out.println("File created.");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		try {
+			System.out.println("Reading file.");
+			Scanner scan = new Scanner(list);
+
+			// Don't start loading until we hit the first section
+			while (scan.hasNext()) {
+				String found = scan.next();
+				System.out.println("Found extra: " + found);
+				if (found.equals("FILES"))
+					break;
+			}
+
+			while (scan.hasNext()) {
+				String found = scan.next();
+				if (found == null)
+					found = "null";
+				if (found.equals("EXTENSIONS"))
+					break;
+				blackFiles.add(found);
+
+				System.out.println("BL'ing file " + found);
+			}
+
+			// Should only be entered when second section is found
+			while (scan.hasNext()) {
+				String found = scan.next();
+				blackTypes.add(found);
+				System.out.println("BL'ing type " + found);
+			}
+
+			scan.close();
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	private ArrayList<FileContainer> filesFound = new ArrayList<FileContainer>();
@@ -92,17 +154,32 @@ public class RDF {
 				FileContainer fc = new FileContainer(f);
 				if (f.length() >= size) {
 					if (startTime - fc.lastAccess() >= time) {
-						filesFound.add(fc);
-						window.results
-								.addResult(String.format("%-25s", fc.name())
-										+ "\t "
-										+ String.format("%.2f GB",
-												fc.size() / 1073741824.0)
-										+ "\t"
-										+ String.format(
-												" %d days ago",
-												((startTime - fc.lastAccess()) / 86400000))
-										+ "\t" + fc.location());
+						boolean blackFlag = false;
+						for (String s : blackFiles)
+							if (s.equals(fc.name()))
+								blackFlag = true;
+
+						for (String s : blackTypes) {
+							System.out.println("Extension: " + fc.name().substring(fc.name().indexOf("."), fc.name().length()));
+							if (s.equals(fc.name().substring(fc.name().indexOf("."), fc.name().length())))
+								blackFlag = true;
+							
+						}
+
+						if (!blackFlag) {
+							filesFound.add(fc);
+							window.results
+									.addResult(String.format("%-25s", fc.name())
+											+ "\t "
+											+ String.format("%.2f GB",
+													fc.size() / 1073741824.0)
+											+ "\t"
+											+ String.format(
+													" %d days ago",
+													((startTime - fc
+															.lastAccess()) / 86400000))
+											+ "\t" + fc.location());
+						}
 
 					}
 				}
@@ -110,14 +187,18 @@ public class RDF {
 				double percent = ((double) foundSpace / (double) totalSpace) * 100;
 				int passedTime = (int) (System.currentTimeMillis() - startTime) / 1000; // Seconds
 				double dataRate = ((double) foundSpace / 1048576) / passedTime; // MB/s
-				int eta = (int) ((1/dataRate) * (((double) totalSpace - (double) foundSpace) / 1048576));
+				int eta = (int) ((1 / dataRate) * (((double) totalSpace - (double) foundSpace) / 1048576));
 				window.search.window.setTitle(String.format("%.1f", percent)
-						+ "%    ETA: " + (eta/60) + " minutes " + (eta%60) + " seconds");
-				
+						+ "%    ETA: " + (eta / 60) + " minutes " + (eta % 60)
+						+ " seconds");
+
 				if (percent > 100)
 					window.search.window.setTitle("100%    ETA: DONE");
-				
-				System.out.println("Found: " + foundSpace + "  Total: " + totalSpace);
+
+				/*
+				 * System.out.println("Found: " + foundSpace + "  Total: " +
+				 * totalSpace);
+				 */
 			}
 		}
 	}
