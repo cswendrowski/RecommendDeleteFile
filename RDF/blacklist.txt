@@ -1,0 +1,5 @@
+FILES
+hiberfil.sys
+
+EXTENSIONS
+.mp4
