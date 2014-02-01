@@ -17,7 +17,7 @@ import javax.swing.JTextField;
 public class UserOptionsWindow implements ActionListener {
 
 	Window window;
-	JTextField size, time;
+	JTextField size, time, loc;
 	JFrame frame;
 	
 	public UserOptionsWindow(Window w) {
@@ -26,6 +26,13 @@ public class UserOptionsWindow implements ActionListener {
 		frame = new JFrame();
 		JPanel masterPanel = new JPanel();
 		masterPanel.setLayout(new BoxLayout(masterPanel,BoxLayout.PAGE_AXIS));
+		
+		JLabel locLabel = new JLabel("What locations should be searched? (Seperate with commas)");
+		loc = new JTextField("C:/");
+		
+		JPanel locPanel = new JPanel(new BorderLayout());
+		locPanel.add(locLabel);
+		locPanel.add(loc,BorderLayout.SOUTH);
 
 		JLabel sizeLabel = new JLabel("What size should files be over? (GB)");
 		size = new JTextField("1");
@@ -41,6 +48,7 @@ public class UserOptionsWindow implements ActionListener {
 		timePanel.add(timeLabel);
 		timePanel.add(time, BorderLayout.SOUTH);
 		
+		masterPanel.add(locPanel);
 		masterPanel.add(sizePanel);
 		masterPanel.add(timePanel);
 		
@@ -73,6 +81,10 @@ public class UserOptionsWindow implements ActionListener {
 
 	public double getUserFileSize() {
 		return Double.valueOf(size.getText());
+	}
+	
+	public String getLocations() {
+		return loc.getText();
 	}
 
 	@Override

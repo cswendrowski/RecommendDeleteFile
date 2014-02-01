@@ -17,7 +17,7 @@ import java.util.Scanner;
 public class RDF {
 
 	private long size, time, startTime, foundSpace, totalSpace;
-	private ArrayList<String> blackFiles, blackTypes;
+	private ArrayList<String> blackFiles, blackTypes, queue;
 	Window window;
 
 	public RDF(Window w) {
@@ -38,12 +38,24 @@ public class RDF {
 
 		blackFiles = new ArrayList<String>();
 		blackTypes = new ArrayList<String>();
+		queue = new ArrayList<String>();
 
 		// System.out.println("Size final: " + size);
 	}
 
 	public void start() {
 		loadBlacklist();
+		String locationList = window.locations();
+		
+		//Read in locations from the list
+		Scanner reader = new Scanner(locationList);
+		reader.useDelimiter(",");
+		
+		while (reader.hasNext())
+			queue.add(reader.next());
+		
+		reader.close();
+		
 		double userSize = window.fileSize();
 		// Double.valueOf(JOptionPane.showInputDialog("What size should files be over? (GB)",
 		// 1));
@@ -59,20 +71,20 @@ public class RDF {
 		if (userTime != 0)
 			time = userTime * 86400000l;
 
+		String list = "";
+		for (String s : queue)
+			list = list + s + ",";
 		window.results.setTitle(String.format(
-				"Files over %.2f GB and older than %d days in C:/",
+				"Files over %.2f GB and older than %d days in " + list,
 				size / 1073741824.0, time / 86400000));
 
 		Thread repainter = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				search("C:/");
-				window.search.clearText();
-				window.search.addText("Found " + (foundSpace / 1048576)
-						+ " MB of data. System reported "
-						+ ((int) ((totalSpace / 1.07) / 1048576))
-						+ " MB. Adjusted total is " + (totalSpace / 1048576)
-						+ " MB");
+				for (String s : queue) {
+					search(s);
+					window.search.clearText();
+				}
 				window.search.window.setTitle("100%    ETA: DONE");
 			}
 		});

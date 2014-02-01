@@ -25,6 +25,10 @@ public class Window {
 	public int lastAccessTime() {
 		return params.getUserLastAccessTime();
 	}
+	
+	public String locations() {
+		return params.getLocations();
+	}
 
 	public void reportDone() {
 		search.show();
