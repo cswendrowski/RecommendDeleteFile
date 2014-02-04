@@ -7,6 +7,8 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.Scanner;
@@ -38,8 +40,12 @@ public class ResultsWindow implements ActionListener {
 		JButton open = new JButton("Open File Location");
 		open.setActionCommand("Open");
 		open.addActionListener(this);
+		
+		JButton blacklist = new JButton("Blacklist File");
+		blacklist.setActionCommand("Blacklist");
+		blacklist.addActionListener(this);
 
-		JPanel resultButtons = new JPanel(new GridLayout(0, 2));
+		JPanel resultButtons = new JPanel(new GridLayout(0, 3));
 
 		DefaultTableModel defTableModel = new DefaultTableModel(data, names);
 		found = new JTable(defTableModel);
@@ -53,6 +59,7 @@ public class ResultsWindow implements ActionListener {
 
 		resultButtons.add(showSearch);
 		resultButtons.add(open);
+		resultButtons.add(blacklist);
 
 		results.add(scrollPane2);
 		results.add(BorderLayout.SOUTH, resultButtons);
@@ -95,6 +102,28 @@ public class ResultsWindow implements ActionListener {
 					}
 				});
 			}
+		}
+		else if (e.getActionCommand().equals("Blacklist")) {
+			try {
+				String file = (String) found.getModel().getValueAt(
+						found.getSelectedRow(), 1);
+				PrintWriter writer = new PrintWriter(new File("Blacklist.txt"));
+				writer.write("FILES");
+				writer.write("\n" + file);
+				
+				for (String s : window.entry.getBlackFiles())
+					writer.write("\n" + s);
+				
+				writer.write("\nTYPES");
+				
+				for (String s : window.entry.getBlackTypes())
+					writer.write("\n" + s);
+				
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
 		}
 
 	}

@@ -142,6 +142,14 @@ public class RDF {
 
 	}
 
+	public ArrayList<String> getBlackFiles() {
+		return blackFiles;
+	}
+	
+	public ArrayList<String> getBlackTypes() {
+		return blackTypes;
+	}
+	
 	private ArrayList<FileContainer> filesFound = new ArrayList<FileContainer>();
 
 	private void search(String path) {
