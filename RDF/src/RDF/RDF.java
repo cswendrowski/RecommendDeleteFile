@@ -45,21 +45,29 @@ public class RDF {
 
 	public void start() {
 		loadBlacklist();
-		String locationList = window.locations();
-		
-		//Read in locations from the list
-		Scanner reader = new Scanner(locationList);
-		reader.useDelimiter(",");
-		
-		while (reader.hasNext())
-			queue.add(reader.next());
-		
-		reader.close();
-		
-		double userSize = window.fileSize();
+
+		if (queue.size() == 0) {
+			String locationList = window.locations();
+
+			// Read in locations from the list
+			Scanner reader = new Scanner(locationList);
+			reader.useDelimiter(",");
+
+			while (reader.hasNext())
+				queue.add(reader.next());
+
+			reader.close();
+		}
+
+		double userSize = 0;
+		int userTime = 0;
+
+		if (size == 0)
+			userSize = window.fileSize();
 		// Double.valueOf(JOptionPane.showInputDialog("What size should files be over? (GB)",
 		// 1));
-		int userTime = window.lastAccessTime();
+		if (time == 0)
+			userTime = window.lastAccessTime();
 		// Integer.valueOf(JOptionPane.showInputDialog("How many days since last access should files be over?",
 		// 30));
 
@@ -145,11 +153,11 @@ public class RDF {
 	public ArrayList<String> getBlackFiles() {
 		return blackFiles;
 	}
-	
+
 	public ArrayList<String> getBlackTypes() {
 		return blackTypes;
 	}
-	
+
 	private ArrayList<FileContainer> filesFound = new ArrayList<FileContainer>();
 
 	private void search(String path) {
@@ -180,10 +188,14 @@ public class RDF {
 								blackFlag = true;
 
 						for (String s : blackTypes) {
-							System.out.println("Extension: " + fc.name().substring(fc.name().indexOf("."), fc.name().length()));
-							if (s.equals(fc.name().substring(fc.name().indexOf("."), fc.name().length())))
+							System.out.println("Extension: "
+									+ fc.name().substring(
+											fc.name().indexOf("."),
+											fc.name().length()));
+							if (s.equals(fc.name().substring(
+									fc.name().indexOf("."), fc.name().length())))
 								blackFlag = true;
-							
+
 						}
 
 						if (!blackFlag) {
@@ -239,5 +251,17 @@ public class RDF {
 
 	public void stop() {
 		shouldExit = true;
+	}
+
+	public void setParams(String locs, double s, int t) {
+		Scanner scan = new Scanner(locs);
+		scan.useDelimiter(",");
+		while (scan.hasNext())
+			queue.add(scan.next());
+
+		scan.close();
+
+		size = (long) (s * 1073741824l);
+		time = t * 86400000l;
 	}
 }
