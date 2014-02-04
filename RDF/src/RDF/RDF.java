@@ -82,6 +82,8 @@ public class RDF {
 		String list = "";
 		for (String s : queue)
 			list = list + s + ",";
+		
+		list = list.substring(0, list.length()-1);
 		window.results.setTitle(String.format(
 				"Files over %.2f GB and older than %d days in " + list,
 				size / 1073741824.0, time / 86400000));
