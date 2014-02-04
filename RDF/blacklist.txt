@@ -1,6 +1,0 @@
-FILES
-hiberfil.sys
-pagefile.sys
-
-EXTENSIONS
-.mp4

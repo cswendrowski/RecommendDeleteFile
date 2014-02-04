@@ -7,7 +7,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
@@ -40,7 +39,7 @@ public class ResultsWindow implements ActionListener {
 		JButton open = new JButton("Open File Location");
 		open.setActionCommand("Open");
 		open.addActionListener(this);
-		
+
 		JButton blacklist = new JButton("Blacklist File");
 		blacklist.setActionCommand("Blacklist");
 		blacklist.addActionListener(this);
@@ -102,28 +101,30 @@ public class ResultsWindow implements ActionListener {
 					}
 				});
 			}
-		}
-		else if (e.getActionCommand().equals("Blacklist")) {
+		} else if (e.getActionCommand().equals("Blacklist")) {
 			try {
 				String file = (String) found.getModel().getValueAt(
-						found.getSelectedRow(), 1);
-				PrintWriter writer = new PrintWriter(new File("Blacklist.txt"));
-				writer.write("FILES");
-				writer.write("\n" + file);
-				
+						found.getSelectedRow(), 0);
+				File list = new File("Blacklist.txt");
+				PrintWriter writer = new PrintWriter(list);
+
+				window.entry.getBlackFiles().add(file);
+
+				writer.write("FILES\r\n");
+
 				for (String s : window.entry.getBlackFiles())
-					writer.write("\n" + s);
-				
-				writer.write("\nTYPES");
-				
+					writer.write("\n" + s + "\r\n");
+
+				writer.write("\nEXTENSIONS\r\n");
+
 				for (String s : window.entry.getBlackTypes())
-					writer.write("\n" + s);
-				
-			} catch (FileNotFoundException e1) {
-				// TODO Auto-generated catch block
+					writer.write("\n" + s + "\r\n");
+
+				writer.close();
+			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
-			
+
 		}
 
 	}
@@ -170,6 +171,6 @@ public class ResultsWindow implements ActionListener {
 
 	public void show() {
 		results.setVisible(true);
-		
+
 	}
 }
