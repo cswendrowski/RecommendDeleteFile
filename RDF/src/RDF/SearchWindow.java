@@ -14,13 +14,17 @@ import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 import javax.swing.text.DefaultCaret;
 
+/**
+ * @author Cody Swendrowski
+ * 
+ */
 public class SearchWindow implements ActionListener {
 
 	JFrame window;
 	JTextArea text;
 	JButton resume, pause;
 	RDF entry;
-	
+
 	public SearchWindow(RDF e) {
 		entry = e;
 		window = new JFrame();
@@ -45,7 +49,7 @@ public class SearchWindow implements ActionListener {
 		resume.addActionListener(this);
 		pause.addActionListener(this);
 		stop.addActionListener(this);
-		
+
 		window.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 
 		window.add(BorderLayout.CENTER, scrollPane);
@@ -53,12 +57,12 @@ public class SearchWindow implements ActionListener {
 		window.setSize(800, 600);
 		window.setVisible(false);
 	}
-	
+
 	public void clearText() {
 		text.setText("Search complete!");
 
 	}
-	
+
 	public void addText(String s) {
 		text.append(s + "\n");
 	}
@@ -82,11 +86,11 @@ public class SearchWindow implements ActionListener {
 			entry.stop();
 			window.setVisible(false);
 		}
-		
+
 	}
 
 	public void show() {
 		window.setVisible(true);
-		
+
 	}
 }

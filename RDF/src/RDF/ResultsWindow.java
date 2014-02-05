@@ -20,6 +20,11 @@ import javax.swing.JTable;
 import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
 
+/**
+ * @author Cody Swendrowski
+ * 
+ */
+
 public class ResultsWindow implements ActionListener {
 
 	JTable found;
@@ -68,7 +73,7 @@ public class ResultsWindow implements ActionListener {
 		results.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("Show")) {
@@ -80,7 +85,7 @@ public class ResultsWindow implements ActionListener {
 			 * s.replace("\\", "\\\\");
 			 * System.out.println("Trying to run: explorer.exe /select, " + s);
 			 * new ProcessBuilder("explorer.exe /select, " + s).start(); } catch
-			 * (IOException e1) { // TODO Auto-generated catch block
+			 * (IOException e1) { //  Auto-generated catch block
 			 * e1.printStackTrace(); }
 			 */
 

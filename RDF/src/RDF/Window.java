@@ -1,5 +1,9 @@
 package RDF;
 
+/**
+ * @author Cody Swendrowski
+ * 
+ */
 public class Window {
 
 	ResultsWindow results;
@@ -11,10 +15,7 @@ public class Window {
 	static String locations;
 
 	public Window() {
-		
-		
 		params = new UserOptionsWindow(this);
-		
 	}
 
 	public Window(double size2, int time2) {
@@ -28,9 +29,8 @@ public class Window {
 			locations = args[0];
 			size = Double.valueOf(args[1]);
 			time = Integer.valueOf(args[2]);
-			new Window(size,time);
-		}
-		else {
+			new Window(size, time);
+		} else {
 			new Window();
 		}
 	}
@@ -42,7 +42,7 @@ public class Window {
 	public int lastAccessTime() {
 		return params.getUserLastAccessTime();
 	}
-	
+
 	public String locations() {
 		return params.getLocations();
 	}
@@ -57,7 +57,7 @@ public class Window {
 		entry = new RDF(this);
 		search = new SearchWindow(entry);
 		results = new ResultsWindow(this);
-		
+
 	}
 
 }

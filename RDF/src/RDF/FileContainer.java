@@ -8,17 +8,20 @@ import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
 
-import javax.activation.MimetypesFileTypeMap;
+/**
+ * @author Cody Swendrowski
+ * 
+ */
 
 public class FileContainer {
 
 	File file;
 	FileTime time;
-	
+
 	public FileContainer(File f) {
 		file = f;
 	}
-	
+
 	public long lastAccess() {
 		if (time == null) {
 			Path path = Paths.get(file.getPath());
@@ -32,17 +35,17 @@ public class FileContainer {
 		}
 		return time.toMillis();
 	}
-	
+
 	public String name() {
 		return file.getName();
 	}
-	
+
 	public long size() {
 		return file.length();
 	}
 
 	public String location() {
-		return file.getParent(); //Desktop
-		//return file.getAbsolutePath();
+		return file.getParent(); // Desktop
+		// return file.getAbsolutePath();
 	}
 }

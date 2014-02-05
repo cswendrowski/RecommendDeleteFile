@@ -14,47 +14,53 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+/**
+ * @author Cody Swendrowski
+ * 
+ */
 public class UserOptionsWindow implements ActionListener {
 
 	Window window;
 	JTextField size, time, loc;
 	JFrame frame;
-	
+
 	public UserOptionsWindow(Window w) {
 		window = w;
-		
+
 		frame = new JFrame();
 		JPanel masterPanel = new JPanel();
-		masterPanel.setLayout(new BoxLayout(masterPanel,BoxLayout.PAGE_AXIS));
-		
-		JLabel locLabel = new JLabel("What locations should be searched? (Seperate with commas)");
+		masterPanel.setLayout(new BoxLayout(masterPanel, BoxLayout.PAGE_AXIS));
+
+		JLabel locLabel = new JLabel(
+				"What locations should be searched? (Seperate with commas)");
 		loc = new JTextField("C:/");
-		
+
 		JPanel locPanel = new JPanel(new BorderLayout());
 		locPanel.add(locLabel);
-		locPanel.add(loc,BorderLayout.SOUTH);
+		locPanel.add(loc, BorderLayout.SOUTH);
 
 		JLabel sizeLabel = new JLabel("What size should files be over? (GB)");
 		size = new JTextField("1");
-		
+
 		JPanel sizePanel = new JPanel(new BorderLayout());
 		sizePanel.add(sizeLabel);
 		sizePanel.add(size, BorderLayout.SOUTH);
-		
-		JLabel timeLabel = new JLabel("How many days since last access should files be over?");
+
+		JLabel timeLabel = new JLabel(
+				"How many days since last access should files be over?");
 		time = new JTextField("30");
-		
+
 		JPanel timePanel = new JPanel(new BorderLayout());
 		timePanel.add(timeLabel);
 		timePanel.add(time, BorderLayout.SOUTH);
-		
+
 		masterPanel.add(locPanel);
 		masterPanel.add(sizePanel);
 		masterPanel.add(timePanel);
-		
+
 		frame.add(masterPanel);
-		
-		JPanel buttons = new JPanel(new GridLayout(0,3));
+
+		JPanel buttons = new JPanel(new GridLayout(0, 3));
 		JButton ok = new JButton("Ok");
 		ok.setActionCommand("Ok");
 		JButton cancel = new JButton("Cancel");
@@ -62,17 +68,17 @@ public class UserOptionsWindow implements ActionListener {
 		buttons.add(ok);
 		buttons.add(cancel);
 		buttons.add(blacklist);
-		
+
 		ok.addActionListener(this);
 		cancel.addActionListener(this);
 		blacklist.addActionListener(this);
-		
+
 		frame.add(buttons, BorderLayout.SOUTH);
 		frame.setSize(800, 500);
 		frame.setVisible(true);
-		
+
 		window.createFrames();
-		//window.reportDone();
+		// window.reportDone();
 	}
 
 	public int getUserLastAccessTime() {
@@ -82,7 +88,7 @@ public class UserOptionsWindow implements ActionListener {
 	public double getUserFileSize() {
 		return Double.valueOf(size.getText());
 	}
-	
+
 	public String getLocations() {
 		return loc.getText();
 	}
@@ -92,8 +98,7 @@ public class UserOptionsWindow implements ActionListener {
 		if (e.getActionCommand().equals("Ok")) {
 			frame.dispose();
 			window.reportDone();
-		}
-		else if (e.getActionCommand().equals("Cancel"))
+		} else if (e.getActionCommand().equals("Cancel"))
 			System.exit(0);
 		else if (e.getActionCommand().equals("Blacklist")) {
 			File f = new File("blacklist.txt");
@@ -104,7 +109,7 @@ public class UserOptionsWindow implements ActionListener {
 				e1.printStackTrace();
 			}
 		}
-		
+
 	}
 
 }
