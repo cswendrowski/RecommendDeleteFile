@@ -3,6 +3,7 @@ package RDF;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -105,6 +106,9 @@ public class RDF {
 		if (!list.exists())
 			try {
 				list.createNewFile();
+				PrintWriter writer = new PrintWriter(list);
+				writer.write("FILES\r\nEXTENSIONS");
+				writer.close();
 				System.out.println("File created.");
 			} catch (IOException e) {
 				e.printStackTrace();

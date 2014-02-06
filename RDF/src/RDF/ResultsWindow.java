@@ -14,6 +14,7 @@ import java.util.Scanner;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -85,7 +86,7 @@ public class ResultsWindow implements ActionListener {
 			 * s.replace("\\", "\\\\");
 			 * System.out.println("Trying to run: explorer.exe /select, " + s);
 			 * new ProcessBuilder("explorer.exe /select, " + s).start(); } catch
-			 * (IOException e1) { //  Auto-generated catch block
+			 * (IOException e1) { // Auto-generated catch block
 			 * e1.printStackTrace(); }
 			 */
 
@@ -107,6 +108,12 @@ public class ResultsWindow implements ActionListener {
 				});
 			}
 		} else if (e.getActionCommand().equals("Blacklist")) {
+			int n = JOptionPane.showConfirmDialog(null,
+					"Are you sure you want to blacklist this file?", "Confirmation",
+					JOptionPane.YES_NO_OPTION);
+			
+			if (n == JOptionPane.NO_OPTION)
+				return;
 			try {
 				String file = (String) found.getModel().getValueAt(
 						found.getSelectedRow(), 0);
