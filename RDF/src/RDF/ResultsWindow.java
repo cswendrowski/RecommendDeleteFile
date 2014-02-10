@@ -57,6 +57,7 @@ public class ResultsWindow implements ActionListener {
 		// found.setModel(new DefaultTableModel());
 		found.setShowGrid(false);
 		found.setIntercellSpacing(new Dimension(0, 0));
+		found.setAutoCreateRowSorter(true);
 
 		JScrollPane scrollPane2 = new JScrollPane(found);
 

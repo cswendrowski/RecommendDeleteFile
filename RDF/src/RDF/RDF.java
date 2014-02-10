@@ -185,8 +185,7 @@ public class RDF {
 							if (s.equals(fc.name()))
 								blackFlag = true;
 
-						String extension = fc.name().substring(
-								fc.name().indexOf("."), fc.name().length());
+						String extension = fc.name();
 						while (extension.substring(1).indexOf(".") != -1) {
 							System.out.println("Ext: " + extension + "  Sub: "
 									+ extension.substring(1));
