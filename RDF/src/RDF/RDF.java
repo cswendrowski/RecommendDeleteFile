@@ -59,22 +59,18 @@ public class RDF {
 		double userSize = 0;
 		int userTime = 0;
 
-		if (size == 0)
-			userSize = window.fileSize();
+		userSize = window.fileSize();
 		// Double.valueOf(JOptionPane.showInputDialog("What size should files be over? (GB)",
 		// 1));
-		if (time == 0)
-			userTime = window.lastAccessTime();
+		userTime = window.lastAccessTime();
 		// Integer.valueOf(JOptionPane.showInputDialog("How many days since last access should files be over?",
 		// 30));
 
 		System.out.println("Size: " + userSize + " Time: " + userTime);
 
-		if (userSize != 0)
-			size = (long) (userSize * 1073741824.0);
+		size = (long) (userSize * 1073741824.0);
 
-		if (userTime != 0)
-			time = userTime * 86400000l;
+		time = userTime * 86400000l;
 
 		String list = "";
 		for (String s : queue)
@@ -189,13 +185,22 @@ public class RDF {
 							if (s.equals(fc.name()))
 								blackFlag = true;
 
+						String extension = fc.name().substring(
+								fc.name().indexOf("."), fc.name().length());
+						while (extension.substring(1).indexOf(".") != -1) {
+							System.out.println("Ext: " + extension + "  Sub: "
+									+ extension.substring(1));
+							extension = extension.substring(
+									extension.indexOf(".") + 1,
+									extension.length());
+
+						}
+						extension = "." + extension;
+
+						System.out.println("Extension: " + extension);
 						for (String s : blackTypes) {
-							System.out.println("Extension: "
-									+ fc.name().substring(
-											fc.name().indexOf("."),
-											fc.name().length()));
-							if (s.equals(fc.name().substring(
-									fc.name().indexOf("."), fc.name().length())))
+
+							if (s.equals(extension))
 								blackFlag = true;
 
 						}
